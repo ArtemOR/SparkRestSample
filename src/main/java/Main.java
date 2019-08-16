@@ -8,25 +8,25 @@ import java.util.UUID;
 
 import static spark.Spark.*;
 
-public class App {
+public class Main {
 
-    static Logger logger = LoggerFactory.getLogger(App.class);
-    private static Map<String, UserStub> users = new HashMap();
+    static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static Map<String, User> users = new HashMap();
     private static Gson gson = new Gson();
 
     public static void main(String[] args) {
         port(8081);
         post("/users", (request, response) -> {
             String json_user = request.body();
-            UserStub userStub = gson.fromJson(json_user, UserStub.class);
-            if (userStub == null) {
+            User user = gson.fromJson(json_user, User.class);
+            if (user == null) {
                 response.status(400);
                 return "User not Created";
 
             }
             String id = UUID.randomUUID().toString();
-            userStub.setId(id);
-            users.put(id, userStub);
+            user.setId(id);
+            users.put(id, user);
             response.status(200);
 
             return gson.toJson(users.get(id));
